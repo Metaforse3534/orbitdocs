@@ -1,0 +1,85 @@
+---
+title: "Orbit AI REST API Reference Overview"
+sidebarTitle: "Overview"
+description: "Complete reference for the Orbit AI REST API. Authenticate with an API key and call chat completions, agents, and usage endpoints."
+---
+
+The Orbit AI API lets you integrate AI chat completions and autonomous agent runs directly into your own applications. Every request goes to the base URL `https://api.orbitdev.org/v1` and must carry a valid API key. Responses are always JSON, so you can consume them from any language or HTTP client.
+
+## Base URL
+
+```
+https://api.orbitdev.org/v1
+```
+
+All endpoints are served over HTTPS. Plain HTTP requests are rejected.
+
+## Request Format
+
+Include two headers on every request:
+
+| Header | Value |
+|---|---|
+| `Authorization` | `Bearer orb_your_api_key` |
+| `Content-Type` | `application/json` |
+
+Your API key is available from the [Developer Portal](https://app.orbitdev.org/developer). Keys begin with the prefix `orb_`.
+
+## Available Endpoints
+
+The following endpoints are available in the current API version:
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/v1/chat/completions` | Send a message array and receive an AI-generated reply |
+| `POST` | `/v1/agents/{agentId}/runs` | Start an autonomous agent run |
+| `GET` | `/v1/agent-runs/{runId}` | Check the status and result of an agent run |
+| `GET` | `/v1/usage` | Retrieve your current usage and remaining quota |
+
+## Quick Start
+
+Run this `curl` command to verify that your API key is valid and inspect your current quota:
+
+```bash
+curl https://api.orbitdev.org/v1/usage \
+  -H 'Authorization: Bearer orb_your_api_key'
+```
+
+A successful response looks like:
+
+```json
+{
+  "tier": "free",
+  "requests": {
+    "used": 12,
+    "limit": 100,
+    "resetsAt": "2024-02-01T00:00:00Z"
+  },
+  "rateLimit": {
+    "requestsPerMinute": 5
+  }
+}
+```
+
+If you receive a `401 Unauthorized` response, double-check that your key is correctly copied from the [Developer Portal](https://app.orbitdev.org/developer) and that the `Bearer ` prefix is present in the header value.
+
+## Explore the API
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api/authentication">
+    Learn how to create API keys, pass them in requests, and keep them secure.
+  </Card>
+  <Card title="Rate Limits" icon="gauge" href="/api/rate-limits">
+    Understand Free and Paid tier limits and handle 429 responses gracefully.
+  </Card>
+  <Card title="Chat Completions" icon="message" href="/api/chat-completions">
+    Send a message array and receive an AI-generated reply in a single call.
+  </Card>
+  <Card title="Agents API" icon="robot" href="/api/agents">
+    Start autonomous agent runs and poll for results with two simple endpoints.
+  </Card>
+</CardGroup>
+
+<Note>
+  The Orbit AI API follows semantic versioning. The current stable version is `v1`. Breaking changes are always introduced in a new version path, so existing integrations remain unaffected.
+</Note>

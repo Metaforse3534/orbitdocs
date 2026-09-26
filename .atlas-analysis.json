@@ -1,0 +1,102 @@
+{
+  "projectType": "saas",
+  "projectName": "Orbit AI",
+  "projectDescription": "A privacy-first, GDPR-compliant AI workspace for professionals and developers featuring chat, agents, automation, and a public API — all in one unified platform.",
+  "theme": "luma",
+  "primaryColor": "#9aa7ff",
+  "lightColor": "#4f46e5",
+  "darkColor": "#050508",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "plans-and-billing"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/workspace",
+              "concepts/agents",
+              "concepts/models",
+              "concepts/artifacts"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "features/chat",
+              "features/agents",
+              "features/automation",
+              "features/files-and-research",
+              "features/browser-extension",
+              "features/desktop-app"
+            ]
+          },
+          {
+            "group": "Account & Settings",
+            "pages": [
+              "account/authentication",
+              "account/settings",
+              "account/api-keys"
+            ]
+          },
+          {
+            "group": "Help",
+            "pages": [
+              "help/faq",
+              "help/troubleshooting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api/overview",
+              "api/authentication",
+              "api/rate-limits"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api/chat-completions",
+              "api/agents",
+              "api/usage"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "AI Chat for writing, research, analysis, and reasoning",
+    "AI Agents (Lead, Builder, Researcher, Reviewer) for multi-step task execution",
+    "Workflow Automation with triggers, conditions, delays, and agent chains",
+    "Files & Research — attach documents, synthesize content, extract facts",
+    "Voice Workflows for hands-free interaction",
+    "Artifact Creation — reports, documents, slides, code, spreadsheets, images",
+    "Windows Desktop App with local workflow and desktop action bridge",
+    "Browser Extension (Extension Pro) for page context and form assistance",
+    "Public REST API for chat completions and agent runs",
+    "GDPR-compliant, privacy-first European hosting",
+    "Flexible model routing: Normal, Orbit, Pulsar, Pro, and Automatic modes",
+    "Team Collaboration with shared context, admin controls, and permissions"
+  ],
+  "publicApiSurface": [
+    "POST /v1/chat/completions",
+    "POST /v1/agents/{agentId}/runs",
+    "GET /v1/agent-runs/{runId}",
+    "GET /v1/usage"
+  ]
+}

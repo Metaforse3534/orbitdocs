@@ -1,0 +1,236 @@
+---
+title: "Troubleshoot Common Orbit AI Issues"
+sidebarTitle: "Troubleshooting"
+description: "Resolve common issues with the Orbit AI workspace, browser extension, desktop app, and API including error codes and fixes."
+---
+
+Most issues with Orbit AI have a straightforward fix. This guide walks you through the most common problems reported across the workspace, API, browser extension, and desktop app — with step-by-step resolutions for each. Work through the relevant section below, and if the problem persists, contact the Orbit Labs support team at [https://www.orbitdev.org](https://www.orbitdev.org).
+
+<Tip>
+  Before digging into a specific section, try a hard refresh (`Ctrl + Shift + R` on Windows/Linux, `Cmd + Shift + R` on macOS) and sign out then back in. These two steps resolve a surprising number of transient issues.
+</Tip>
+
+---
+
+## Workspace Issues
+
+<AccordionGroup>
+
+  <Accordion title="Can't sign in to my account">
+    <Steps>
+      <Step title="Double-check your credentials">
+        Confirm you are using the email address associated with your Orbit AI account and that Caps Lock is off when entering your password.
+      </Step>
+      <Step title="Reset your password">
+        On the [sign-in page](https://app.orbitdev.org/auth), click **Forgot password?** and follow the instructions sent to your email. Check your spam folder if the email does not arrive within a few minutes.
+      </Step>
+      <Step title="Clear browser cookies">
+        Stale session cookies can block the sign-in flow. Open your browser settings, clear cookies for `app.orbitdev.org`, and try signing in again.
+      </Step>
+      <Step title="Try a different browser or private window">
+        Open a private/incognito window or a different browser to rule out browser-extension conflicts interfering with the sign-in page.
+      </Step>
+    </Steps>
+
+    <Note>
+      If your organisation uses SAML SSO (Enterprise plan), use the **Sign in with SSO** option on the sign-in page and enter your company email domain. Contact your IT administrator if SSO is not working.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Workspace not loading or showing a blank screen">
+    <Steps>
+      <Step title="Check your internet connection">
+        Open another website to confirm you have a working connection. Orbit AI requires a stable internet connection for all AI features.
+      </Step>
+      <Step title="Try a different browser">
+        Orbit AI is tested on the latest versions of Chrome, Edge, Firefox, and Safari. If you are using an older browser version, update it or switch to a supported one.
+      </Step>
+      <Step title="Disable browser extensions">
+        Some ad blockers and security extensions intercept requests to `api.orbitdev.org`. Temporarily disable extensions and reload the page to see if one is causing the issue.
+      </Step>
+      <Step title="Clear cache and hard-refresh">
+        Press `Ctrl + Shift + R` (Windows/Linux) or `Cmd + Shift + R` (macOS) to force a full reload without the cache.
+      </Step>
+    </Steps>
+  </Accordion>
+
+</AccordionGroup>
+
+---
+
+## API Issues
+
+<AccordionGroup>
+
+  <Accordion title="401 Unauthorized">
+    Your request does not include a valid API key, or the key has been revoked.
+
+    **Check the following:**
+
+    - Confirm the `Authorization` header is present and formatted correctly:
+      ```bash
+      Authorization: Bearer orb_your_api_key
+      ```
+    - Verify that the key starts with `orb_` and has not been truncated or wrapped with extra whitespace.
+    - Open the [developer dashboard](https://app.orbitdev.org/developer) and confirm the key is listed and not marked as revoked.
+    - If you recently rotated keys, make sure your code is using the new key and not a cached older one.
+
+    <Warning>
+      If your key was accidentally committed to a public repository, revoke it immediately from the [developer dashboard](https://app.orbitdev.org/developer) and generate a new one. Treat all previously exposed keys as compromised.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="402 Payment Required">
+    Your account does not have sufficient credits or you have exceeded your plan's task limit.
+
+    **Resolution options:**
+
+    - Log in and go to [app.orbitdev.org/billing](https://app.orbitdev.org/billing) to review your current usage and upgrade your plan.
+    - If you are on the free Developer plan (1,000 tasks/month), consider upgrading to **Orbit Pro** (€10/month) or purchasing the paid API tier (€10 one-time for 10,000 requests/month).
+    - If you are on the free API tier (100 requests/month), upgrade to the paid API tier from the [developer dashboard](https://app.orbitdev.org/developer).
+  </Accordion>
+
+  <Accordion title="422 Unprocessable Entity">
+    The server understood your request but could not process it because the request body is malformed or missing required fields.
+
+    **Common causes and fixes:**
+
+    - **Missing required fields** — check the API reference for the endpoint you are calling and ensure all required parameters are included.
+    - **Wrong content type** — make sure you are sending `Content-Type: application/json` and that your body is valid JSON.
+    - **Invalid field values** — for example, passing a string where a number is expected, or an unsupported value for an enum field.
+
+    Use a tool like `jq` or an online JSON validator to check your request body before sending:
+
+    ```bash
+    echo '{"model":"auto","messages":[{"role":"user","content":"Hello"}]}' | jq .
+    ```
+  </Accordion>
+
+  <Accordion title="429 Too Many Requests">
+    You have exceeded the rate limit for your API tier.
+
+    | Tier | Rate limit | Monthly quota |
+    |------|-----------|---------------|
+    | Free | 5 req/min | 100 req/month |
+    | Paid | 30 req/min | 10,000 req/month |
+
+    **How to handle this:**
+
+    - Read the `Retry-After` header in the response — it tells you how many seconds to wait before retrying.
+    - Implement **exponential backoff** in your code: wait 1 second, then 2, then 4, doubling after each failed retry up to a maximum delay.
+    - If you consistently hit rate limits, upgrade to the paid API tier from the [developer dashboard](https://app.orbitdev.org/developer).
+
+    ```javascript
+    async function fetchWithRetry(url, options, retries = 3) {
+      for (let i = 0; i < retries; i++) {
+        const res = await fetch(url, options);
+        if (res.status !== 429) return res;
+        const retryAfter = res.headers.get("Retry-After") || Math.pow(2, i);
+        await new Promise((r) => setTimeout(r, retryAfter * 1000));
+      }
+      throw new Error("Rate limit exceeded after retries");
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="500 Internal Server Error">
+    An unexpected error occurred on the Orbit AI server side. This is not caused by your request.
+
+    **Steps to take:**
+
+    1. Wait a few seconds and retry the request — transient server errors typically resolve quickly.
+    2. If the error persists for more than a few minutes, check the [Orbit Labs status page](https://www.orbitdev.org) for any active incidents.
+    3. If no incident is reported and the error continues, contact support with the timestamp of your request, the endpoint you called, and the full response body.
+
+    <Note>
+      Your monthly quota is not decremented for requests that result in a `5xx` error. You are only charged for requests that return a successful `2xx` response.
+    </Note>
+  </Accordion>
+
+</AccordionGroup>
+
+---
+
+## Browser Extension Issues
+
+<AccordionGroup>
+
+  <Accordion title="The Orbit AI panel is not appearing on pages">
+    <Steps>
+      <Step title="Sign in to the web app first">
+        The browser extension requires an active session at [app.orbitdev.org](https://app.orbitdev.org). Open the web app in a separate tab, sign in, then return to the page where you want to use the extension.
+      </Step>
+      <Step title="Check the extension is enabled for the site">
+        Click the puzzle-piece icon in your browser toolbar, find the Orbit AI extension, and confirm it is set to **Allow on all sites** or is specifically allowed on the current domain.
+      </Step>
+      <Step title="Reload the extension">
+        Go to your browser's extensions page (`chrome://extensions` in Chrome), toggle the Orbit AI extension off and back on, then reload the page.
+      </Step>
+    </Steps>
+  </Accordion>
+
+  <Accordion title="Page context is not loading in the extension panel">
+    If the extension opens but shows an error loading the page context:
+
+    <Steps>
+      <Step title="Refresh the page">
+        Close the Orbit AI panel, press `F5` to reload the page fully, then re-open the panel.
+      </Step>
+      <Step title="Check for content security policy restrictions">
+        Some websites use strict Content Security Policies (CSP) that prevent extensions from reading page content. On these sites, Orbit AI can still run as a standalone panel but cannot access the page context. This is expected behaviour and not a bug.
+      </Step>
+      <Step title="Update the extension">
+        Make sure you are running the latest version of the Orbit AI extension. Visit the Chrome Web Store or Edge Add-ons page and check for updates.
+      </Step>
+    </Steps>
+  </Accordion>
+
+</AccordionGroup>
+
+---
+
+## Desktop App Issues
+
+<AccordionGroup>
+
+  <Accordion title="The desktop app won't launch">
+    <Steps>
+      <Step title="Confirm you are running Windows">
+        The Orbit AI desktop app currently supports **Windows only**. macOS and Linux users should access the platform at [app.orbitdev.org](https://app.orbitdev.org) in their browser.
+      </Step>
+      <Step title="Reinstall the application">
+        Download the latest installer from [app.orbitdev.org](https://app.orbitdev.org), uninstall the existing version from **Settings → Apps → Installed Apps**, then run the new installer.
+      </Step>
+      <Step title="Check Windows event logs">
+        If reinstalling does not help, open **Event Viewer** (`Win + R`, type `eventvwr`), navigate to **Windows Logs → Application**, and look for recent errors from the Orbit AI process. Share these details with support if you need further assistance.
+      </Step>
+    </Steps>
+
+    <Warning>
+      Do not run multiple instances of the Orbit AI desktop app simultaneously. If the app appears frozen, end the process in **Task Manager** before attempting to relaunch.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Not signed in after installing the desktop app">
+    The desktop app does not carry over browser sessions — you need to sign in separately after installation.
+
+    <Steps>
+      <Step title="Open the desktop app">
+        Launch the Orbit AI app from the Start menu or desktop shortcut.
+      </Step>
+      <Step title="Sign in with your Orbit account">
+        On the sign-in screen, enter the email address and password associated with your Orbit AI account. If your organisation uses SSO, click **Sign in with SSO** and enter your company domain.
+      </Step>
+      <Step title="Stay signed in">
+        Check **Keep me signed in** on the sign-in screen to avoid being prompted for credentials on every launch.
+      </Step>
+    </Steps>
+  </Accordion>
+
+</AccordionGroup>
+
+---
+
+<Tip>
+  If none of the steps above resolve your issue, the Orbit Labs support team is ready to help. Visit [https://www.orbitdev.org](https://www.orbitdev.org) and use the contact form or live chat to describe your problem. Include your account email, the steps you have already tried, and any error messages or screenshots — this helps the team diagnose and fix your issue as quickly as possible.
+</Tip>

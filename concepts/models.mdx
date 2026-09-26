@@ -1,0 +1,101 @@
+---
+title: "AI Models and Routing Modes in Orbit AI"
+sidebarTitle: "Models"
+description: "Explore Orbit AI's model routing options — Normal, Orbit, Pulsar, Pro, and Automatic — and learn which mode to use for speed, quality, or complex tasks."
+---
+
+Orbit AI abstracts the complexity of individual model versions away from you. Instead of selecting a specific external model by name — and keeping up with ever-changing version numbers — you choose a **routing mode**. Orbit's routing layer then selects the most appropriate compute path for your task, accounting for factors like required capability, latency, context depth, and tool access. This means you benefit from improvements to the underlying infrastructure automatically, without changing anything in your workflow or API calls.
+
+## Routing Modes
+
+Each routing mode represents a different balance of speed, capability, and cost. Choose the mode that matches the demands of your current task.
+
+<Accordion title="Normal — Fastest response">
+  **Normal** mode routes your request to a standard-capability path optimised for low latency. Use it for everyday tasks where speed matters more than depth: quick questions, short drafts, simple lookups, and lightweight code completions.
+
+  - **Speed**: Fastest
+  - **Capability**: Standard
+  - **Available on**: All plans (Developer, Orbit Pro, Orbit Team, Enterprise)
+</Accordion>
+
+<Accordion title="Orbit — Balanced quality and speed">
+  **Orbit** mode uses Orbit Labs' proprietary routing optimisation to balance response quality against response time. It is the default mode for most general-purpose tasks and delivers consistently strong results across a wide range of use cases.
+
+  - **Speed**: Fast
+  - **Capability**: Balanced
+  - **Available on**: All plans
+</Accordion>
+
+<Accordion title="Pulsar — High-capability routing">
+  **Pulsar** mode routes to high-capability compute tiers designed for complex, multi-step reasoning, long-context analysis, and tasks that benefit from deeper deliberation. Use Pulsar for involved research tasks, large document synthesis, sophisticated code generation, and nuanced multi-turn agent workflows.
+
+  - **Speed**: Moderate
+  - **Capability**: High
+  - **Available on**: All plans
+</Accordion>
+
+<Accordion title="Pro — Premium priority routing">
+  **Pro** mode provides priority access to the highest-capacity compute tiers available in the Orbit infrastructure. It is reserved for users who need maximum capability and prefer to avoid queue delays during peak usage. Pro mode is rate-limit-aware and prioritised above Normal, Orbit, and Pulsar in the dispatch queue.
+
+  - **Speed**: Prioritised (queue bypass)
+  - **Capability**: Premium
+  - **Available on**: **Orbit Pro plan or higher only**
+</Accordion>
+
+<Accordion title="Automatic — Let Orbit decide">
+  **Automatic** mode lets Orbit's routing layer select the optimal mode for each individual request. Orbit analyses your prompt's complexity, length, and tool requirements and dispatches it to the most appropriate routing path. This is the recommended mode if you want consistently good results without manually tuning the routing selection per task.
+
+  - **Speed**: Varies by task
+  - **Capability**: Adaptive
+  - **Available on**: All plans
+</Accordion>
+
+## Plan Availability at a Glance
+
+| Routing Mode | Developer (Free) | Orbit Pro | Orbit Team | Enterprise |
+|---|:---:|:---:|:---:|:---:|
+| Normal | ✓ | ✓ | ✓ | ✓ |
+| Orbit | ✓ | ✓ | ✓ | ✓ |
+| Pulsar | ✓ | ✓ | ✓ | ✓ |
+| Pro | — | ✓ | ✓ | ✓ |
+| Automatic | ✓ | ✓ | ✓ | ✓ |
+
+Upgrade your plan at [app.orbitdev.org](https://app.orbitdev.org) to unlock Pro mode.
+
+## Pro Pulsar Research Initiative
+
+**Pro Pulsar** is Orbit Labs' language model research and AI infrastructure program. It encompasses model architecture, training methodology, inference optimisation, and GPU infrastructure development. In the Orbit workspace, **Pro Pulsar** also refers to the premium routing tier that gives subscribers priority access to high-capacity compute — these two uses of the name are related but distinct.
+
+Pro Pulsar is an ongoing initiative, not a single fixed model release. Orbit Labs operates under strict scientific transparency standards: all components are labelled accurately as Research, Prototype, or Generally Available, with no unsupported performance claims or fabricated benchmarks.
+
+## Setting the Routing Mode
+
+<Tabs>
+  <Tab title="Workspace UI">
+    Open a Chat session or an Agent configuration. Click the **mode selector** (shown below the prompt input) and choose your preferred routing mode from the dropdown. Your selection persists for the duration of that session.
+  </Tab>
+  <Tab title="API">
+    Pass the `model` field in your request body to specify a routing mode programmatically.
+
+    ```bash
+    curl -X POST https://api.orbitdev.org/v1/chat/completions \
+      -H "Authorization: Bearer orb_<your_api_key>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "pulsar",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarise the key provisions of GDPR Article 17."
+          }
+        ]
+      }'
+    ```
+
+    Valid values for `model` are: `normal`, `orbit`, `pulsar`, `pro`, `automatic`.
+  </Tab>
+</Tabs>
+
+<Note>
+  Orbit does not guarantee that any specific external model provider or version underpins a given routing mode. The underlying compute path may change as Orbit Labs updates its infrastructure and research initiatives. Your routing mode selection and the quality characteristics it represents remain stable even as the underlying implementation evolves.
+</Note>

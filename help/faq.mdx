@@ -1,0 +1,94 @@
+---
+title: "Frequently Asked Questions About Orbit AI"
+sidebarTitle: "FAQ"
+description: "Answers to common questions about Orbit AI plans, privacy, agents, the API, and how the workspace handles your data."
+---
+
+Whether you are evaluating Orbit AI for the first time or looking to get more out of a feature you already use, the answers below cover the most common questions from the Orbit AI community. If you do not find what you need here, reach out to the Orbit Labs team at [orbitdev.org](https://www.orbitdev.org).
+
+<AccordionGroup>
+
+  <Accordion title="What is Orbit AI?">
+    Orbit AI is a unified AI workspace built by Orbit Labs, a company based in the Netherlands. It brings together AI Chat, autonomous AI Agents, Workflow Automation, Files & Research, Voice Workflows, and Artifact Creation in a single, privacy-first platform. You can access Orbit AI through your browser at [app.orbitdev.org](https://app.orbitdev.org), via the Windows desktop app, or through the browser extension — and you can build on top of it programmatically using the public REST API.
+  </Accordion>
+
+  <Accordion title="Is my data private?">
+    Yes. Orbit AI is designed from the ground up with privacy as a core principle. Orbit Labs is headquartered in the Netherlands and operates in full compliance with the **General Data Protection Regulation (GDPR)**. Your data is never used to train advertising models, sold to third parties, or used for ad profiling. You retain ownership of everything you create inside your workspace, and you can request deletion of your data at any time from [app.orbitdev.org/settings](https://app.orbitdev.org/settings) or by contacting support.
+  </Accordion>
+
+  <Accordion title="What is the difference between Chat and Agents?">
+    **AI Chat** is a conversational interface where you exchange messages with an AI model in real time. It is best for quick questions, brainstorming, drafting content, and single-turn tasks.
+
+    **AI Agents** are autonomous task runners that can break a goal down into steps, use tools, browse the web, read files, and produce structured outputs with minimal hand-holding. Orbit AI offers four specialist agents:
+
+    - **Lead Agent** — orchestrates multi-step goals and delegates to other agents.
+    - **Builder Agent** — writes and explains code.
+    - **Researcher Agent** — gathers, synthesises, and cites information from the web and your files.
+    - **Reviewer Agent** — critiques, edits, and improves existing content or code.
+
+    Use Chat when you want a fast back-and-forth exchange. Use Agents when you have a goal that requires multiple steps or tool usage.
+  </Accordion>
+
+  <Accordion title="What are the model routing modes?">
+    Model routing modes control how Orbit AI selects the underlying AI model for each request:
+
+    - **Auto** — the platform analyses your task and routes it to the most capable available model automatically. This is the recommended default for most users.
+    - **Speed** — prioritises the fastest model for rapid responses, ideal for quick lookups or high-volume workflows where latency matters more than maximum accuracy.
+    - **Quality** — routes to the highest-capability model available, best for complex reasoning, long-form writing, or precision-critical tasks where response time is less important.
+
+    You can set your default routing mode in [Settings → Workspace](https://app.orbitdev.org/settings) or override it on a per-session basis from the Chat or Agent interface.
+  </Accordion>
+
+  <Accordion title="Can I use Orbit AI offline?">
+    The **Orbit AI Windows desktop app** includes limited offline capability. You can access previously loaded conversations, review saved artifacts, and work with files that have already been synced to your device. However, sending new messages, running agents, and triggering workflows all require an active internet connection because inference runs on Orbit Labs' servers. Full offline AI processing is not currently supported.
+  </Accordion>
+
+  <Accordion title="What happens if I exceed my task limit on the Developer plan?">
+    The **Developer plan** includes 1,000 tasks per month at no cost. Once you reach that limit, new AI Chat messages, agent runs, and workflow executions are paused for the remainder of the billing cycle. You will see a notification in the workspace when you are approaching the limit.
+
+    To resume immediately, you can:
+    - **Upgrade to Orbit Pro** (€10/month) for a higher task allowance.
+    - **Upgrade to Orbit Team** (€25/user/month) if you need shared capacity across a group.
+    - Wait for your monthly quota to reset at the start of the next billing period.
+
+    Upgrade at any time from [app.orbitdev.org/billing](https://app.orbitdev.org/billing).
+  </Accordion>
+
+  <Accordion title="How do I upgrade my plan?">
+    <Steps>
+      <Step title="Open the billing page">
+        Go to [https://app.orbitdev.org/billing](https://app.orbitdev.org/billing).
+      </Step>
+      <Step title="Choose a plan">
+        Compare Developer, Orbit Pro, Orbit Team, and Enterprise options and click **Upgrade** on the plan you want.
+      </Step>
+      <Step title="Enter payment details">
+        Provide your card details and billing address. Payments are processed securely via Stripe.
+      </Step>
+      <Step title="Start using your new plan">
+        Your upgraded limits and features activate immediately after payment is confirmed.
+      </Step>
+    </Steps>
+
+    For **Enterprise** pricing and custom contracts, contact the Orbit Labs sales team at [orbitdev.org](https://www.orbitdev.org).
+  </Accordion>
+
+  <Accordion title="Is team collaboration available?">
+    Yes. The **Orbit Team** plan (€25/user/month) enables shared workspaces where multiple users can collaborate on the same projects, share agent runs, review each other's artifacts, and manage permissions by role. Workspace administrators can invite members, assign roles, and monitor team-wide usage from the team dashboard. For large organisations requiring custom seat counts, SSO, and dedicated support, the **Enterprise** plan offers tailored arrangements — contact sales for details.
+  </Accordion>
+
+  <Accordion title="What is Pro Pulsar?">
+    **Pro Pulsar** is Orbit AI's highest-performance model routing tier, available to Orbit Pro and Team subscribers. When the routing mode is set to *Quality* on a Pro plan, tasks are eligible for Pulsar routing, which directs requests to the most powerful available models for the most demanding workloads — such as complex multi-document research, advanced code generation, and long-form structured writing. Pulsar routing is applied automatically; you do not need to enable it separately beyond selecting the Quality routing mode in your workspace settings.
+  </Accordion>
+
+  <Accordion title="How do I contact support?">
+    The Orbit Labs support team is available through the following channels:
+
+    - **Website:** Visit [https://www.orbitdev.org](https://www.orbitdev.org) and use the contact form or live chat widget.
+    - **In-app:** Click the **Help** icon (question mark) in the bottom-left corner of the workspace to open the support panel.
+    - **Enterprise customers** have access to a dedicated support channel and SLA-backed response times included in their contract.
+
+    When contacting support, include your account email, a description of the issue, and any relevant error messages or screenshots to help the team resolve your request as quickly as possible.
+  </Accordion>
+
+</AccordionGroup>

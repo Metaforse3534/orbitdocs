@@ -1,0 +1,106 @@
+---
+title: "AI Agents in Orbit: Types and Capabilities"
+sidebarTitle: "Agents"
+description: "Understand Orbit AI's four agent types — Lead, Builder, Researcher, and Reviewer — and how they execute autonomous, multi-step tasks in your workspace."
+---
+
+Agents are autonomous AI workers inside the Orbit workspace that can plan, reason, and act across multiple steps without requiring your input at each stage. Unlike a standard chat exchange — which is a single round-trip between you and the model — an agent accepts a goal, breaks it into subtasks, executes each step using available tools and context, and delivers a structured result. Agents are the right choice whenever a task is too complex, too long, or too multi-faceted for a single prompt to handle.
+
+## The Four Agent Types
+
+Orbit provides four specialised agent types. Each is optimised for a distinct role in a workflow, and they can work together on the same goal.
+
+<CardGroup cols={2}>
+  <Card title="Lead" icon="crown">
+    **Coordinates** other agents and manages complex, multi-stage workflows. The Lead agent decomposes a high-level goal into subtasks, delegates to the right specialist agents, and synthesises their outputs into a final deliverable.
+  </Card>
+  <Card title="Builder" icon="hammer">
+    **Creates artifacts** — documents, code files, reports, slides, and spreadsheets. The Builder agent is optimised for structured output generation and is the right choice when your goal is a concrete, shareable file or piece of content.
+  </Card>
+  <Card title="Researcher" icon="magnifying-glass">
+    **Gathers and synthesises information** from uploaded files, workspace context, and prior messages. The Researcher agent is built for deep information retrieval, summarisation, and evidence-based reasoning across large bodies of source material.
+  </Card>
+  <Card title="Reviewer" icon="clipboard-check">
+    **Audits and critiques** the outputs of other agents or your own content. The Reviewer agent checks for accuracy, consistency, logical gaps, and quality — making it ideal as the final step in any high-stakes workflow.
+  </Card>
+</CardGroup>
+
+## Agents vs. Chat
+
+Choosing between chat and agents comes down to task complexity and the type of output you need.
+
+| | Chat | Agents |
+|---|---|---|
+| **Execution style** | Single round-trip | Multi-step, autonomous |
+| **Output** | Text response | Structured artifacts and reports |
+| **Tool access** | Limited | Full tool and file access |
+| **Steps** | One | Many, chained automatically |
+| **Best for** | Quick questions, drafts, lookups | Research, document creation, audits |
+
+## Parallel Agent Execution
+
+On the **Orbit Pro** plan and higher, you can run up to **10 agents in parallel**. Parallel execution is useful when you want multiple specialist agents working simultaneously on different aspects of the same project — for example, a Researcher gathering data at the same time a Builder drafts the report structure.
+
+On the free **Developer** plan, agents run sequentially. You can still chain multiple agent types; they simply execute one after another rather than concurrently.
+
+## Starting an Agent Run
+
+### From the Workspace UI
+
+<Steps>
+  <Step title="Open the Agents view">
+    In the left sidebar, click **Agents** to open the agent dashboard.
+  </Step>
+  <Step title="Select an agent type">
+    Choose the agent type that matches your goal — Lead, Builder, Researcher, or Reviewer.
+  </Step>
+  <Step title="Describe your goal">
+    Enter a clear, specific goal in the prompt field. Attach any relevant files from your workspace.
+  </Step>
+  <Step title="Choose a routing mode">
+    Select a routing mode (Normal, Orbit, Pulsar, Pro, or Automatic) from the mode selector.
+  </Step>
+  <Step title="Launch the run">
+    Click **Run Agent**. The run begins immediately and you can monitor its progress in the Agents dashboard.
+  </Step>
+</Steps>
+
+### Via the API
+
+Use the `POST /v1/agents/{agentId}/runs` endpoint to start an agent run programmatically. Replace `{agentId}` with the ID of the agent you want to invoke, and provide your goal in the request body.
+
+```bash
+curl -X POST https://api.orbitdev.org/v1/agents/{agentId}/runs \
+  -H "Authorization: Bearer orb_<your_api_key>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "goal": "Research the top five GDPR compliance frameworks and produce a comparison report.",
+    "routing_mode": "pulsar",
+    "context": {
+      "files": ["file_abc123"]
+    }
+  }'
+```
+
+The response includes a `run_id` you can use to poll for results:
+
+```bash
+curl https://api.orbitdev.org/v1/agent-runs/{runId} \
+  -H "Authorization: Bearer orb_<your_api_key>"
+```
+
+```json
+{
+  "run_id": "run_7f3k2m",
+  "agent_id": "researcher",
+  "status": "completed",
+  "output": {
+    "summary": "A comparison of five leading GDPR compliance frameworks...",
+    "artifacts": ["artifact_xyz789"]
+  }
+}
+```
+
+<Tip>
+  Use **chat** for fast, conversational tasks like drafting a paragraph, explaining a concept, or quick lookups. Switch to **agents** when your task requires multiple sequential steps, involves large files or research, or when you need a structured, reusable output — the extra setup time pays off quickly on complex goals.
+</Tip>

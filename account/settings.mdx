@@ -1,0 +1,69 @@
+---
+title: "Configure Your Orbit AI Account and Preferences"
+sidebarTitle: "Settings"
+description: "Update your profile, notification preferences, workspace theme, and connected integrations from the Orbit AI settings panel."
+---
+
+The Orbit AI settings panel is your central control hub for personalising every aspect of your experience — from how the interface looks to how your workspace routes AI tasks. Open it any time by navigating to [https://app.orbitdev.org/settings](https://app.orbitdev.org/settings) or by clicking your avatar in the top-right corner of the workspace and selecting **Settings**.
+
+## Profile
+
+The **Profile** section lets you control your public-facing identity within Orbit AI:
+
+- **Display name** — update the name shown in shared workspaces and agent outputs.
+- **Email address** — change the email associated with your account. A confirmation link is sent to the new address before the change takes effect.
+- **Avatar** — upload a profile picture (PNG or JPG, max 2 MB) that appears in team workspaces and the sidebar.
+
+## Appearance
+
+Toggle between **Light** and **Dark** mode to match your working environment. Orbit AI remembers your preference across devices as long as you are signed in with the same account.
+
+<CardGroup cols={2}>
+  <Card title="Light Mode" icon="sun">
+    A bright, high-contrast theme ideal for well-lit offices and external displays.
+  </Card>
+  <Card title="Dark Mode" icon="moon">
+    A low-luminance theme designed to reduce eye strain during extended sessions.
+  </Card>
+</CardGroup>
+
+## Notifications
+
+Control which events trigger email notifications from the **Notifications** section:
+
+- **Agent run completions** — receive an email when a long-running agent task finishes.
+- **Workflow status updates** — get notified when an automated workflow succeeds or encounters an error.
+- **Billing alerts** — stay informed about plan renewals, usage limits, and invoice generation.
+- **Product updates** — opt in to release notes and feature announcements from Orbit Labs.
+
+Toggle each category on or off independently to keep your inbox relevant.
+
+## Workspace
+
+The **Workspace** section contains global defaults that apply across all your AI Chat sessions and agent runs:
+
+- **Default model routing mode** — choose how Orbit AI selects an underlying model for each request. Options include *Auto* (platform picks the best available model), *Speed* (optimise for fastest response), and *Quality* (optimise for most accurate output).
+- **Language preferences** — set your preferred response language so agents and chat replies default to that language without you needing to specify it in every prompt.
+
+<Tip>
+  Set your **default model routing mode** to *Auto* and let Orbit AI match each task to the most capable model for that specific workload. This is especially useful if your day mixes quick Q&A sessions with deep research or code-generation tasks — the platform switches between models automatically so you always get the best result without thinking about it.
+</Tip>
+
+## Billing
+
+The **Billing** section links directly to [https://app.orbitdev.org/billing](https://app.orbitdev.org/billing), where you can:
+
+- View your current plan and next renewal date.
+- Upgrade or downgrade between Developer, Orbit Pro, Orbit Team, and Enterprise plans.
+- Download past invoices as PDFs.
+- Update your payment method or billing address.
+
+## Integrations
+
+The **Integrations** section lets you connect Orbit AI to the external tools and services your team already uses — available on **Pro and above** plans.
+
+<Info>
+  Integrations are available on **Orbit Pro**, **Orbit Team**, and **Enterprise** plans. If you are on the free Developer plan, upgrade at [app.orbitdev.org/billing](https://app.orbitdev.org/billing) to unlock this section.
+</Info>
+
+From this section you can authorise Orbit AI to read from or write to connected services, manage permission scopes for each integration, and disconnect any service at any time. Removing an integration immediately revokes Orbit AI's access token for that service.

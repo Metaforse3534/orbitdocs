@@ -1,47 +1,144 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: 'Get Started with Orbit AI in Minutes'
+sidebarTitle: 'Quickstart'
+description: 'Create your Orbit AI account, choose a plan, open the workspace, and run your first AI task or API call — step by step from zero to productive.'
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
-
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
-
-## Prerequisites
-
-Before you begin, you must have:
-
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+This guide walks you through everything you need to go from zero to your first completed AI task. Whether you want to use the browser-based workspace or call the REST API from your own code, you'll be up and running in just a few minutes. No prior experience with AI platforms is required.
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+  <Step title="Create your account">
+    Go to [app.orbitdev.org/auth](https://app.orbitdev.org/auth) and sign up with your email address. No credit card is required to create an account.
 
-    ```bash
-    npm install your-package
-    ```
+    Once you confirm your email, you'll land in the Orbit workspace dashboard.
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
 
-    ```bash
-    your-cli init
-    ```
+  <Step title="Choose a plan">
+    Orbit offers a free **Developer** plan to get you started immediately:
+
+    - **Developer (Free)** — 1,000 tasks per month, standard model access, single agent. No payment needed.
+    - **Orbit Pro (€10/month)** — Unlimited tasks, Pro Pulsar model access, up to 10 parallel agents, browser automation, and the Windows desktop app.
+    - **Orbit Team (€25/user/month)** — Everything in Pro, plus shared team context, admin controls, and multi-user permissions.
+
+    You can upgrade at any time from the billing dashboard at [app.orbitdev.org/billing](https://app.orbitdev.org/billing). See [Plans & Billing](plans-and-billing) for a full comparison.
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
 
-    ```bash
-    your-cli start
+  <Step title="Open the workspace and start a chat">
+    From the dashboard, click **Open Workspace** to launch the full AI interface. From here you can:
+
+    - Start a conversation in **AI Chat**
+    - Upload a file and ask Orbit to analyze or summarize it
+    - Trigger an agent workflow by describing a multi-step goal
+    - Use **Voice Workflows** for hands-free interaction
+
+    Type a message in the chat input and press Enter to send your first request. Orbit responds immediately.
+  </Step>
+
+  <Step title="Get an API key (optional)">
+    If you want to call the Orbit API from your own application, navigate to [app.orbitdev.org/developer](https://app.orbitdev.org/developer) and generate an API key. Your key will be prefixed with `orb_` and looks like this:
+
     ```
+    orb_sk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    ```
+
+    Keep your key secure — treat it like a password. Do not commit it to version control or expose it in client-side code.
   </Step>
 </Steps>
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
+## Make your first API call
 
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+Once you have an API key, use it to call the `POST /v1/chat/completions` endpoint. This endpoint accepts a user message and returns an AI-generated response — the same intelligence that powers the workspace chat interface, accessible from any application.
+
+<Tabs>
+  <Tab title="cURL">
+    ```bash
+    curl -X POST https://api.orbitdev.org/v1/chat/completions \
+      -H "Authorization: Bearer orb_<your_api_key>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "orbit-standard",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize the key benefits of GDPR for end users."
+          }
+        ]
+      }'
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```python
+    import requests
+
+    API_KEY = "orb_<your_api_key>"
+    BASE_URL = "https://api.orbitdev.org/v1"
+
+    response = requests.post(
+        f"{BASE_URL}/chat/completions",
+        headers={
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json",
+        },
+        json={
+            "model": "orbit-standard",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Summarize the key benefits of GDPR for end users."
+                }
+            ]
+        }
+    )
+
+    print(response.json())
+    ```
+  </Tab>
+  <Tab title="JavaScript">
+    ```javascript
+    const response = await fetch('https://api.orbitdev.org/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer orb_<your_api_key>',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'orbit-standard',
+        messages: [
+          {
+            role: 'user',
+            content: 'Summarize the key benefits of GDPR for end users.'
+          }
+        ]
+      })
+    });
+
+    const data = await response.json();
+    console.log(data);
+    ```
+  </Tab>
+</Tabs>
+
+A successful response returns a JSON object with the AI's reply in `choices[0].message.content`.
+
+<Note>
+  **Your data stays private.** Orbit AI is operated by Orbit Labs in the Netherlands and is fully GDPR-compliant. Your conversation content and files are not used to train AI models without your consent, and your data is never sold or used for advertising purposes. You can review the full privacy policy at [orbitdev.org/Routes/privacy](https://www.orbitdev.org/Routes/privacy).
+</Note>
+
+## What to explore next
+
+<CardGroup cols={2}>
+  <Card
+    title="API Overview"
+    icon="code"
+    href="api/overview"
+  >
+    Explore all available endpoints — chat completions, agent runs, run status, and usage tracking.
+  </Card>
+  <Card
+    title="Plans & Billing"
+    icon="credit-card"
+    href="plans-and-billing"
+  >
+    Understand API rate limits, monthly quotas, and how to upgrade your plan or purchase API credits.
+  </Card>
+</CardGroup>

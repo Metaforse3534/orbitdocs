@@ -1,0 +1,105 @@
+---
+title: "Orbit AI API Rate Limits and Quotas"
+sidebarTitle: "Rate Limits"
+description: "Understand the Orbit AI API rate limits per tier — Free and Paid — and how to handle 429 responses with exponential backoff."
+---
+
+The Orbit AI API enforces rate limits to ensure fair usage and stable performance for all users. Limits apply per API key and are measured in two dimensions: requests per minute (burst) and requests per month (quota). Exceeding either limit returns a `429 Too Many Requests` response.
+
+## Tiers
+
+<CardGroup cols={2}>
+  <Card title="Free Tier" icon="circle">
+    **5 requests / minute**
+
+    **100 requests / month**
+
+    Included at no cost with every Orbit account. Ideal for prototyping and low-volume integrations.
+  </Card>
+  <Card title="Paid Tier" icon="bolt">
+    **30 requests / minute**
+
+    **10,000 requests / month**
+
+    One-time access fee of **€10**. Best for production workloads and automated pipelines.
+  </Card>
+</CardGroup>
+
+## Upgrading to the Paid Tier
+
+To unlock higher limits, purchase Paid tier API access from the [Developer Portal](https://app.orbitdev.org/developer). The upgrade is a one-time payment of **€10** — there is no recurring subscription for the tier itself. Your increased limits take effect immediately after payment.
+
+## Credit Packs
+
+If you exhaust your monthly quota before your billing period resets, you can purchase additional capacity with a credit pack:
+
+| Pack | Credits | Price |
+|---|---|---|
+| Starter | 25 credits | €4.99 |
+| Power | 100 credits | €14.99 |
+| Elite | 500 credits | €49.99 |
+
+Credit packs are available from the [Developer Portal](https://app.orbitdev.org/developer) and are applied to your account immediately upon purchase.
+
+## Rate Limit Headers
+
+When a request is rate-limited, the API returns a `429 Too Many Requests` status with a JSON body:
+
+```json
+{
+  "error": {
+    "code": "rate_limit_exceeded",
+    "message": "You have exceeded your requests-per-minute limit. Please retry after 1 second."
+  }
+}
+```
+
+## Handling 429 Responses
+
+The recommended strategy for handling rate limits is **exponential backoff with jitter** — wait progressively longer between retries, with a small random component to prevent synchronized retry storms from multiple clients.
+
+```javascript
+async function callWithRetry(fn, maxRetries = 3) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const response = await fn();
+    if (response.status !== 429) return response;
+    const delay = Math.pow(2, attempt) * 1000 + Math.random() * 500;
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+  throw new Error('Max retries exceeded');
+}
+```
+
+The delay schedule for `maxRetries = 3` looks like:
+
+| Attempt | Base Delay | Jitter (random) | Approximate Wait |
+|---|---|---|---|
+| 1st retry | 1,000 ms | 0–500 ms | ~1.0–1.5 s |
+| 2nd retry | 2,000 ms | 0–500 ms | ~2.0–2.5 s |
+| 3rd retry | 4,000 ms | 0–500 ms | ~4.0–4.5 s |
+
+Wrap any API call that may encounter a `429` response with this pattern:
+
+```javascript
+const response = await callWithRetry(() =>
+  fetch('https://api.orbitdev.org/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.ORBIT_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      messages: [{ role: 'user', content: 'Hello!' }],
+      mode: 'auto',
+    }),
+  })
+);
+```
+
+<Tip>
+  Before starting any batch operation that will send many requests, call `GET /v1/usage` to check how many requests you have remaining in your current billing period. If you are close to your monthly limit, consider purchasing a credit pack or scheduling the batch job after your quota resets.
+</Tip>
+
+## Quota Reset
+
+Monthly quotas reset on the first day of each calendar month at 00:00 UTC. The exact reset timestamp for your account is returned in the `requests.resetsAt` field of the [`GET /v1/usage`](/api/usage) response.

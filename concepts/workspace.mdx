@@ -1,0 +1,73 @@
+---
+title: "Understanding the Orbit AI Workspace"
+sidebarTitle: "Workspace"
+description: "Learn how the Orbit AI workspace is organized — including sessions, shared context, model routing, and how the desktop app and browser extension connect."
+---
+
+The Orbit AI workspace at [app.orbitdev.org](https://app.orbitdev.org) is your unified environment for every AI-powered task — from quick chat queries to multi-agent research workflows. Everything you do in Orbit happens inside the workspace: conversations, agent runs, automations, file management, and settings all live in one place, so you never need to switch between disconnected tools.
+
+## Key Areas of the Workspace
+
+The workspace UI is divided into several primary areas, each purpose-built for a specific type of work.
+
+<CardGroup cols={2}>
+  <Card title="Chat Panel" icon="message">
+    Your primary interface for conversational AI. Send messages, attach files, and switch routing modes without leaving the conversation.
+  </Card>
+  <Card title="Agents View" icon="robot">
+    Browse, configure, and launch AI agents. Monitor active runs and review completed outputs — all from a single dashboard.
+  </Card>
+  <Card title="Automations" icon="bolt">
+    Build and manage workflow automations that chain AI steps, trigger on schedules, or react to external events.
+  </Card>
+  <Card title="Files" icon="folder">
+    Upload, organise, and reference documents, datasets, and research materials that agents and chat can draw on.
+  </Card>
+  <Card title="Settings" icon="gear">
+    Manage your account, API keys, appearance preferences, and plan details.
+  </Card>
+</CardGroup>
+
+## How Context Works
+
+Every session in the Orbit workspace maintains a shared context window. When you upload a file, paste a document, or exchange messages in a conversation, that information remains accessible throughout the session. Agents can reference your uploaded files, pull in prior messages, and build on previous outputs — so you don't have to repeat yourself as a task evolves.
+
+Key context behaviours to understand:
+
+- **Files you upload** in the Files area are available to any agent or chat session you explicitly attach them to.
+- **Prior messages** in a conversation are included in the context window up to the model's token limit.
+- **Agent runs** can read session context and write structured outputs (artifacts) back into it.
+- **New sessions** start with a clean context — previous session data is not automatically carried forward.
+
+## Model Routing Modes
+
+Inside the workspace you choose a routing mode rather than a specific underlying model version. Orbit then selects the optimal compute path for your request. The available modes are:
+
+| Mode | Description | Plan Required |
+|---|---|---|
+| **Normal** | Standard performance with the fastest response times | All plans |
+| **Orbit** | Balanced quality-to-speed routing, optimised by Orbit Labs | All plans |
+| **Pulsar** | High-capability routing for complex, multi-step tasks | All plans |
+| **Pro** | Premium routing with priority access to high-capacity compute | Orbit Pro or higher |
+| **Automatic** | Orbit selects the best mode for your task automatically | All plans |
+
+You can switch routing modes from the mode selector in the Chat panel or in an agent's configuration before starting a run.
+
+## Connecting Desktop and Browser
+
+The workspace does not stop at the browser tab. Orbit provides two companion surfaces that extend your workspace into your daily environment.
+
+<CardGroup cols={2}>
+  <Card title="Windows Desktop App" icon="windows">
+    The Orbit desktop app gives you a native workspace experience on Windows, with system-level integrations and offline-ready access to your recent sessions. Download it from [app.orbitdev.org](https://app.orbitdev.org).
+  </Card>
+  <Card title="Browser Extension" icon="puzzle-piece">
+    The Orbit browser extension lets you invoke AI assistance directly on any webpage — highlight text, trigger an agent, or send content to your workspace without switching tabs.
+  </Card>
+</CardGroup>
+
+Both surfaces stay in sync with your web workspace: artifacts, files, and conversation history are consistent across all three surfaces in real time.
+
+<Note>
+  The Orbit workspace uses a dark theme by default. If you prefer a lighter interface, navigate to **Settings → Appearance** and switch to Light mode.
+</Note>

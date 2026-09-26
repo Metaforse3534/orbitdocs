@@ -1,0 +1,94 @@
+---
+title: "Automate Workflows with Orbit AI Triggers and Chains"
+sidebarTitle: "Automation"
+description: "Build multi-step automated workflows in Orbit AI using triggers, conditions, delays, and chained agent sequences."
+---
+
+Orbit Workflow Automation lets you build multi-step pipelines that run on their own schedule or in response to events — no manual intervention required. Chain together agent tasks, branch on conditions, add time delays, and wire up external webhooks to create recurring workflows that match exactly how your team works.
+
+## The Automation Builder
+
+The automation builder is available at [https://app.orbitdev.org/automations](https://app.orbitdev.org/automations). From this dashboard you can create, edit, activate, pause, and delete workflows. Each workflow is made up of a single **trigger** followed by one or more **steps**.
+
+<Note>
+  Workflow Automation is available on the **Orbit Pro** plan (€10/mo) and above. Developer (free) plan accounts do not have access to the automation builder. Upgrade at [https://app.orbitdev.org](https://app.orbitdev.org).
+</Note>
+
+## Building Blocks
+
+Every automation workflow is assembled from four core building blocks:
+
+<Accordion title="Triggers">
+  A trigger defines the event that starts your workflow. Choose from:
+
+  - **Schedule** — run the workflow at a fixed interval (e.g., every Monday at 08:00 UTC) using a cron-style time picker.
+  - **Event** — fire when something happens inside Orbit, such as a file being added to a research folder or an agent run completing.
+  - **Webhook** — receive an HTTP POST from an external system (e.g., a form submission or a CI/CD pipeline event) and use its payload as workflow input.
+</Accordion>
+
+<Accordion title="Conditions">
+  Conditions add branching logic based on the output of a previous step. For example, only continue to a report-generation step if the Researcher agent found more than five unique sources. Conditions evaluate simple expressions against step outputs and route the workflow down a `true` or `false` path.
+</Accordion>
+
+<Accordion title="Delays">
+  Delays pause workflow execution for a defined duration before the next step runs. Use delays to throttle downstream tasks, respect external rate limits, or schedule a follow-up action hours after an initial step completes.
+</Accordion>
+
+<Accordion title="Agent Steps">
+  Agent steps invoke a specific Orbit agent type — Lead, Builder, Researcher, or Reviewer — with a set of instructions you define at build time. The step's output is automatically passed as context to subsequent steps, letting you chain agents together into a coherent pipeline.
+</Accordion>
+
+## Example Workflow
+
+Here's a practical example that runs every Monday morning and produces a formatted weekly news report:
+
+> **Every Monday at 08:00 UTC →** Researcher agent summarizes last week's industry news **→** Builder agent formats the summary as a polished PDF-ready report **→** the finished report is saved to your Orbit Files folder.
+
+This workflow replaces a manual process that might otherwise take 30–60 minutes of reading and writing each week.
+
+<Tip>
+  Use the **Lead** agent type as the first step in complex multi-agent chains. Lead can interpret a high-level objective, break it into subtasks, and delegate each one to the appropriate downstream agent — making your automation more resilient to varied inputs without requiring you to hard-code every decision.
+</Tip>
+
+## Creating an Automation
+
+<Steps>
+  <Step title="Open the Automation Builder">
+    Go to [https://app.orbitdev.org/automations](https://app.orbitdev.org/automations) and click **New Automation** in the top-right corner. Give your workflow a descriptive name so you can identify it at a glance.
+  </Step>
+  <Step title="Choose a trigger">
+    Select a trigger type — **Schedule**, **Event**, or **Webhook** — and configure its settings. For a schedule trigger, pick the days and time you want the workflow to fire. For a webhook trigger, copy the generated endpoint URL to use in your external system.
+  </Step>
+  <Step title="Add steps">
+    Click **+ Add Step** to insert the first step after your trigger. Choose from:
+
+    - **Agent step** — select an agent type and write the task instructions
+    - **Condition** — define the expression and configure the `true`/`false` branches
+    - **Delay** — set the duration in minutes, hours, or days
+
+    Repeat to build out the full sequence. Drag steps to reorder them at any time.
+  </Step>
+  <Step title="Configure each agent step">
+    For every agent step, specify:
+
+    - **Agent type** — Lead, Builder, Researcher, or Reviewer
+    - **Instructions** — the task prompt, including any references to previous step outputs using `{{steps.stepName.output}}` template syntax
+    - **Output format** — plain text, Markdown, or structured JSON (where supported)
+  </Step>
+  <Step title="Activate the workflow">
+    Click **Activate** to enable the workflow. The toggle in the automation list will turn green, and the workflow will begin firing according to its trigger. You can pause or deactivate it at any time without deleting your configuration.
+  </Step>
+</Steps>
+
+## Monitoring Workflow Runs
+
+Each time a workflow fires, Orbit logs a **run record** in the automation's history view. Select any workflow from [https://app.orbitdev.org/automations](https://app.orbitdev.org/automations) and click **Run History** to see:
+
+- Run start and end timestamps
+- The status of each step (`completed`, `skipped`, `failed`)
+- Step-level input, output, and error messages
+- Total tasks consumed by the run
+
+<Warning>
+  If a step fails, the workflow stops at that step and subsequent steps do not execute. Review the step's error message in the run history and check that your agent instructions and input references are correctly configured before re-running.
+</Warning>

@@ -1,0 +1,174 @@
+---
+title: 'Orbit AI Plans, Pricing, and Billing'
+sidebarTitle: 'Plans & Billing'
+description: 'Compare Orbit AI Developer, Pro, Team, and Enterprise plans — including API tiers, credit packs, task quotas, and how to manage your billing settings.'
+---
+
+Orbit AI offers four workspace plans and two API access tiers so that individuals, developers, and organizations can scale their usage to match their needs. All plans include full GDPR compliance, zero advertising data use, and access to the core Orbit workspace. This page explains what each plan includes, how the developer API tiers work, and where to manage your billing.
+
+## Workspace plans
+
+<CardGroup cols={2}>
+  <Card title="Developer" icon="code">
+    **€0 / month — free forever**
+
+    The Developer plan is the best way to get started with Orbit AI at no cost. It includes:
+
+    - 1,000 tasks per month
+    - Standard Orbit model access
+    - Single-agent task runner
+    - Local file and document analysis
+    - Full web workspace interface
+    - Public API access (Free tier)
+  </Card>
+
+  <Card title="Orbit Pro" icon="star">
+    **€10 / month (or €100 / year)**
+
+    Orbit Pro is the recommended plan for individuals and professionals who need full platform access. It includes everything in Developer, plus:
+
+    - Unlimited tasks (fair-use policy applies)
+    - Pro Pulsar frontier model access
+    - Up to 10 parallel agents
+    - Full headless browser automation
+    - Windows desktop application
+    - Priority inference queues
+    - Public API access (Paid tier)
+  </Card>
+
+  <Card title="Orbit Team" icon="users">
+    **€25 / user / month**
+
+    Orbit Team extends Pro with collaboration features for groups and organizations. It includes everything in Orbit Pro, plus:
+
+    - Shared team context and memory
+    - Centralized admin and billing console
+    - Multi-user project permissions
+    - Up to 50 parallel agent workflows
+
+    <Note>
+      Some Orbit Team collaboration features — including advanced shared context and multi-user project management — are partially in development and will roll out progressively. Check the [changelog](https://www.orbitdev.org/Routes/blog.html) for the latest status.
+    </Note>
+  </Card>
+
+  <Card title="Enterprise" icon="building">
+    **Custom pricing**
+
+    Enterprise is designed for large organizations with strict compliance, security, or infrastructure requirements. Contact the Orbit team for a tailored quote. Enterprise includes:
+
+    - Dedicated private VPC deployment
+    - Custom fine-tuned model checkpoints
+    - SAML SSO and SCIM provisioning
+    - 99.99% uptime SLA
+    - Dedicated solutions architect
+    - SOC2 audit logs
+  </Card>
+</CardGroup>
+
+## Plan comparison
+
+| Feature | Developer | Orbit Pro | Orbit Team | Enterprise |
+|---|---|---|---|---|
+| Monthly task quota | 1,000 | Unlimited | Unlimited | Dedicated pool |
+| Standard Orbit model | ✓ | ✓ | ✓ | ✓ |
+| Pro Pulsar model | — | ✓ | ✓ | ✓ |
+| Parallel agents | 1 | Up to 10 | Up to 50 | Unlimited |
+| Browser automation | Basic | Full cloud | Full cloud | Custom proxies |
+| Windows desktop app | — | ✓ | ✓ | ✓ |
+| Shared team context | — | — | ✓ | ✓ |
+| Admin & billing console | — | — | ✓ | ✓ |
+| SAML SSO / SCIM | — | — | Optional | ✓ |
+| Private VPC deployment | — | — | — | ✓ |
+| Zero data training guarantee | ✓ | ✓ | ✓ | ✓ |
+
+<Tip>
+  Orbit Pro billed annually costs **€100/year** (equivalent to ~€8.33/month) — a 20% saving compared to monthly billing. Annual billing is available at [app.orbitdev.org/billing](https://app.orbitdev.org/billing).
+</Tip>
+
+---
+
+## Developer API tiers
+
+The Orbit public REST API is available to all users. API access operates on a separate tier system from workspace plans.
+
+<CardGroup cols={2}>
+  <Card title="Free API Tier" icon="gauge">
+    **Included with all plans**
+
+    - 5 requests per minute
+    - 100 requests per month
+    - Access to all documented endpoints
+    - Suitable for prototyping and low-volume integrations
+  </Card>
+
+  <Card title="Paid API Tier" icon="gauge-high">
+    **€10 one-time unlock fee**
+
+    - 30 requests per minute
+    - 10,000 requests per month
+    - Access to all documented endpoints
+    - Suitable for production integrations and higher-throughput workflows
+  </Card>
+</CardGroup>
+
+### API credit packs
+
+If you need additional API capacity beyond the monthly limits of your tier, you can purchase credit packs from the developer dashboard. Credits are additive — they supplement your monthly allocation and do not expire within your billing period.
+
+<CardGroup cols={3}>
+  <Card title="Starter Pack" icon="box">
+    **€4.99**
+
+    25 API credits — ideal for occasional burst usage or testing new integrations.
+  </Card>
+  <Card title="Power Pack" icon="boxes-stacked">
+    **€14.99**
+
+    100 API credits — suited for active development cycles or moderate production loads.
+  </Card>
+  <Card title="Elite Pack" icon="layer-group">
+    **€49.99**
+
+    500 API credits — best value for high-throughput applications and teams with consistent API demand.
+  </Card>
+</CardGroup>
+
+<Info>
+  API keys are generated at [app.orbitdev.org/developer](https://app.orbitdev.org/developer). All keys use the `orb_` prefix and are tied to your account's current API tier. For full details on rate limits, authentication, and endpoint reference, see the [API Keys guide](account/api-keys).
+</Info>
+
+---
+
+## Managing your billing
+
+You can view and manage all billing details from the Orbit billing dashboard at [app.orbitdev.org/billing](https://app.orbitdev.org/billing). From there you can:
+
+<Steps>
+  <Step title="View your current plan and usage">
+    See how many tasks you've consumed this billing period, your current plan, and any active API credits.
+  </Step>
+  <Step title="Upgrade or change your plan">
+    Switch between Developer, Pro, Team, or request an Enterprise quote. Plan changes take effect at the start of your next billing cycle.
+  </Step>
+  <Step title="Manage payment methods">
+    Add, update, or remove credit and debit cards. Orbit uses a secure payment processor — your card details are never stored on Orbit's servers.
+  </Step>
+  <Step title="Purchase API credits">
+    Buy Starter, Power, or Elite credit packs directly from the billing dashboard or from the developer section at [app.orbitdev.org/developer](https://app.orbitdev.org/developer).
+  </Step>
+  <Step title="Download invoices">
+    Access PDF invoices for all past payments, suitable for expense reporting or business accounting.
+  </Step>
+</Steps>
+
+<Note>
+  Orbit Labs is a Netherlands-based company. All prices are displayed in Euros (€) and are inclusive of any applicable VAT where required by law. If you need a Data Processing Agreement (DPA) for your organization, contact Orbit through [orbitdev.org/Routes/contact](https://www.orbitdev.org/Routes/contact).
+</Note>
+
+## Enterprise inquiries
+
+If your organization has requirements that go beyond the standard Team plan — such as private deployment, custom SLAs, SAML/SCIM provisioning, or dedicated support — reach out to the Orbit team directly. Enterprise pricing is fully custom and scoped to your organization's needs.
+
+<Card title="Contact Orbit Sales" icon="envelope" href="https://www.orbitdev.org/Routes/contact">
+  Describe your organization's requirements and an Orbit team member will respond with a tailored proposal.
+</Card>

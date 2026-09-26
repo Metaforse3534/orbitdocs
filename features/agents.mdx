@@ -1,0 +1,118 @@
+---
+title: "Run AI Agents for Complex Multi-Step Tasks"
+sidebarTitle: "Using Agents"
+description: "Set up and run Orbit AI agents to automate complex, multi-step workflows with parallel execution and structured outputs."
+---
+
+Orbit AI Agents are autonomous workers that break down complex, multi-step tasks and execute them independently — planning subtasks, using tools, and producing structured outputs without requiring you to manage each step manually. Unlike a single chat message, an agent run can iterate, self-correct, and chain actions together to complete longer-horizon work.
+
+## Creating and Running an Agent
+
+<Steps>
+  <Step title="Open the Agents panel">
+    Navigate to [https://app.orbitdev.org](https://app.orbitdev.org) and select **Agents** from the left sidebar.
+  </Step>
+  <Step title="Create a new agent">
+    Click **New Agent**, give it a name, and choose an agent type (see [Choosing an Agent Type](#choosing-the-right-agent-type) below). Add a system prompt or standing instructions if you want the agent to have a defined role or persona.
+  </Step>
+  <Step title="Provide a task input">
+    In the **Run** panel, enter the task you want the agent to complete. Be specific about the desired output format, length, or constraints to get the best results.
+  </Step>
+  <Step title="Start the run">
+    Click **Run Agent**. Orbit will begin executing the task, and you'll see live status updates and step logs appear in the run panel.
+  </Step>
+  <Step title="Review the output">
+    Once the run completes, the agent's output appears in the results pane. You can copy, export, or pass the output to another agent or workflow step.
+  </Step>
+</Steps>
+
+## Choosing the Right Agent Type
+
+Each agent type is purpose-built for a different kind of work. Select the type that best matches your task when creating an agent.
+
+<CardGroup cols={2}>
+  <Card title="Lead" icon="sitemap">
+    Coordinates other agents and subtasks. Use Lead when you need a top-level orchestrator to plan, delegate, and synthesize work across a multi-agent pipeline.
+  </Card>
+  <Card title="Builder" icon="hammer">
+    Specialized in generating structured artifacts — documents, reports, code files, and formatted outputs. Use Builder when the goal is a polished deliverable.
+  </Card>
+  <Card title="Researcher" icon="magnifying-glass">
+    Focuses on gathering, synthesizing, and summarizing information from provided sources or general knowledge. Use Researcher for in-depth analysis and fact-finding tasks.
+  </Card>
+  <Card title="Reviewer" icon="clipboard-check">
+    Critically evaluates existing content for quality, accuracy, consistency, and completeness. Use Reviewer to audit or QA the output of other agents or human-written drafts.
+  </Card>
+</CardGroup>
+
+## Parallel Agent Execution
+
+On the **Orbit Pro** plan, you can run up to **10 agents simultaneously**. Parallel execution lets you split a large project into independent workstreams — for example, running a Researcher agent and a Reviewer agent at the same time on different documents — and dramatically reduce total turnaround time.
+
+<Note>
+  Parallel agent execution (up to 10 concurrent agents) is a **Pro plan** feature. On the free Developer plan, agents run sequentially, one at a time. Upgrade at [https://app.orbitdev.org](https://app.orbitdev.org) to unlock parallel runs.
+</Note>
+
+## Monitoring a Running Agent
+
+While an agent is active, the run panel displays:
+
+- **Status** — `queued`, `running`, `completed`, or `failed`
+- **Step logs** — a real-time log of every action, tool call, and intermediate result the agent produces
+- **Progress indicators** — estimated completion for long-running tasks
+
+To stop an in-progress run, click the **Stop** button in the run panel. Stopping a run preserves any partial output already generated. Canceled runs still count toward your monthly usage quota.
+
+## Running Agents via the API
+
+You can trigger agent runs programmatically using the Orbit REST API. Retrieve your `agentId` from the agent's settings page in the workspace.
+
+<Tabs>
+  <Tab title="Start a Run">
+    Send a `POST` request to `/v1/agents/{agentId}/runs` with your task as the `input` field:
+
+    ```bash
+    curl -X POST https://api.orbitdev.org/v1/agents/{agentId}/runs \
+      -H 'Authorization: Bearer orb_your_api_key' \
+      -H 'Content-Type: application/json' \
+      -d '{"input": "Research the latest trends in renewable energy and write a 500-word summary."}'
+    ```
+
+    A successful response returns a `runId` you can use to poll for status:
+
+    ```json
+    {
+      "runId": "run_01j9abc123xyz",
+      "agentId": "agt_01j9def456uvw",
+      "status": "queued",
+      "createdAt": "2025-01-15T10:30:00Z"
+    }
+    ```
+  </Tab>
+  <Tab title="Check Run Status">
+    Poll `GET /v1/agent-runs/{runId}` to retrieve the current status and output of a run:
+
+    ```bash
+    curl https://api.orbitdev.org/v1/agent-runs/{runId} \
+      -H 'Authorization: Bearer orb_your_api_key'
+    ```
+
+    A completed run response includes the agent's full output:
+
+    ```json
+    {
+      "runId": "run_01j9abc123xyz",
+      "status": "completed",
+      "output": "Renewable energy adoption accelerated significantly in 2024...",
+      "completedAt": "2025-01-15T10:32:45Z",
+      "usage": {
+        "tasksConsumed": 1
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+<Info>
+  API keys are available from the Developer Portal at [https://app.orbitdev.org/developer](https://app.orbitdev.org/developer). All requests must include an `Authorization: Bearer orb_<api_key>` header. See the [API Reference](/api/overview) for full endpoint documentation and rate limit details.
+</Info>

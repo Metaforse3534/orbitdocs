@@ -1,0 +1,68 @@
+---
+title: "AI Chat: Write, Research, and Reason with Orbit"
+sidebarTitle: "AI Chat"
+description: "Use Orbit AI's chat interface for writing, research, analysis, coding help, and reasoning with full session context."
+---
+
+Orbit AI Chat is your conversational workspace for tackling any knowledge task — from drafting and editing documents to synthesizing research, debugging code, and reasoning through complex problems. Every conversation maintains full session context, so you can build on previous messages, attach files, and switch between tasks without losing the thread.
+
+## Accessing AI Chat
+
+Open [https://app.orbitdev.org](https://app.orbitdev.org) in your browser, then click **New Chat** in the sidebar. Each new chat starts a fresh session with its own context window. You can rename, pin, and revisit sessions at any time from the chat history panel.
+
+## Key Capabilities
+
+<CardGroup cols={2}>
+  <Card title="Writing & Editing" icon="pen-nib">
+    Draft documents, rewrite prose, summarize long-form content, and iterate on tone or structure — all within a single conversation.
+  </Card>
+  <Card title="Research & Analysis" icon="magnifying-glass">
+    Synthesize multiple documents, extract key facts, compare sources, and build structured summaries from raw material.
+  </Card>
+  <Card title="Code Assistance" icon="code">
+    Explain unfamiliar code, debug errors, draft implementation changes, and review pull-request diffs with inline commentary.
+  </Card>
+  <Card title="Complex Reasoning" icon="brain">
+    Work through multi-step logic problems, evaluate trade-offs, and structure arguments with step-by-step chain-of-thought reasoning.
+  </Card>
+</CardGroup>
+
+## Session Context and File Attachments
+
+Everything you send within a single session — messages, uploaded files, and model responses — is part of the shared context. This means you can reference earlier parts of a conversation, layer additional documents on top of an ongoing analysis, and ask follow-up questions without repeating background information.
+
+To attach a file, click the **paperclip icon** in the chat input bar and select any document, spreadsheet, image, or code file from your device. Orbit will parse the file and make its contents available as context for all subsequent messages in that session.
+
+<Tip>
+  Attach multiple files at once to get richer, cross-document analysis. For example, upload three competitor reports and ask Orbit to identify common themes — the model will read all three simultaneously and synthesize a unified response.
+</Tip>
+
+## Switching Model Routing Modes
+
+Orbit AI Chat supports several routing modes that control which underlying model or model strategy handles your request. You can change the routing mode for any session using the **mode selector** in the top bar of the chat interface.
+
+<Tabs>
+  <Tab title="Automatic">
+    Orbit selects the best model for each message dynamically, balancing speed, cost, and capability. This is the recommended default for most use cases.
+  </Tab>
+  <Tab title="Normal">
+    Routes to a fast, general-purpose model optimized for everyday writing and Q&A tasks where low latency matters most.
+  </Tab>
+  <Tab title="Orbit">
+    Uses Orbit Labs' own routing layer tuned for workspace productivity tasks — writing, summarization, and structured document work.
+  </Tab>
+  <Tab title="Pulsar">
+    Activates a high-throughput mode designed for rapid iteration — best for brainstorming sessions where you want quick, varied responses.
+  </Tab>
+  <Tab title="Pro">
+    Routes to the most capable available model for deep reasoning, complex code generation, and tasks that benefit from maximum accuracy over speed.
+  </Tab>
+</Tabs>
+
+## Voice Mode
+
+Orbit AI Chat includes hands-free voice interaction so you can dictate messages and hear responses read aloud without touching your keyboard. To enable voice mode, click the **microphone icon** in the chat toolbar. Voice mode is fully integrated with session context, so you can switch between typed and spoken input mid-conversation.
+
+<Info>
+  Voice mode is available in the web workspace at [https://app.orbitdev.org](https://app.orbitdev.org) and in the Orbit Windows Desktop App. Browser microphone permissions must be granted on first use.
+</Info>

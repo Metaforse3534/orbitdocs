@@ -1,0 +1,117 @@
+---
+title: "Creating and Using Artifacts in Orbit AI"
+sidebarTitle: "Artifacts"
+description: "Artifacts are structured, reusable outputs — documents, code, slides, spreadsheets, and images — generated and stored by Orbit AI agents and chat sessions."
+---
+
+Artifacts are the structured, reusable outputs that Orbit AI produces during chat sessions and agent runs. Unlike a plain text response that lives only in the conversation thread, an artifact is a discrete, named file that you can view, download, share, and reference in future sessions. Whether you need a polished research report, a production-ready code file, or a presentation deck, artifacts are how Orbit delivers finished work — not just words on a screen.
+
+## Types of Artifacts
+
+Orbit can generate the following artifact types, depending on the task and the agent or prompt you use.
+
+<CardGroup cols={3}>
+  <Card title="Reports" icon="file-lines">
+    Long-form written documents with structured sections, citations, and summaries. Ideal for research outputs, briefings, and analysis deliverables.
+  </Card>
+  <Card title="Documents" icon="file-word">
+    General-purpose text documents — memos, proposals, plans, and free-form writing formatted for reading or editing.
+  </Card>
+  <Card title="Slides" icon="presentation-screen">
+    Presentation decks with structured slide content, headers, bullet points, and speaker notes ready for further design.
+  </Card>
+  <Card title="Code Files" icon="code">
+    Source code in any language, complete with file names and directory structure where relevant. Ready to copy, run, or commit.
+  </Card>
+  <Card title="Spreadsheets" icon="table">
+    Tabular data, financial models, and structured datasets formatted for use in spreadsheet applications.
+  </Card>
+  <Card title="Images" icon="image">
+    AI-generated visual assets including diagrams, illustrations, charts, and concept visuals.
+  </Card>
+</CardGroup>
+
+## Creating an Artifact
+
+You can create artifacts through the workspace UI — via chat or via an agent run.
+
+### From Chat
+
+<Steps>
+  <Step title="Open a Chat session">
+    Navigate to the **Chat** panel in the Orbit workspace.
+  </Step>
+  <Step title="Request a structured output">
+    Phrase your prompt to ask for a specific artifact type. For example: *"Write a competitive analysis report on European GDPR compliance tools and save it as a document."* or *"Generate a Python script that connects to a PostgreSQL database."*
+  </Step>
+  <Step title="View the artifact">
+    When Orbit produces an artifact, it appears in the **Artifacts** panel alongside the chat response. Click on it to open a full preview.
+  </Step>
+</Steps>
+
+### From an Agent Run
+
+<Steps>
+  <Step title="Configure your agent">
+    In the **Agents** view, select an agent type — the **Builder** agent is optimised for artifact creation. Set your goal and attach any source files.
+  </Step>
+  <Step title="Specify the output format">
+    In your goal description, indicate the artifact type you expect. For example: *"Produce a slide deck summarising the attached research report."*
+  </Step>
+  <Step title="Launch the run">
+    Click **Run Agent**. When the run completes, the artifact appears in the Agents dashboard under the run's output.
+  </Step>
+</Steps>
+
+## Viewing, Downloading, and Sharing Artifacts
+
+All artifacts you generate are stored in your workspace and accessible from the **Artifacts** section of the workspace sidebar.
+
+<Tabs>
+  <Tab title="View">
+    Click any artifact in the Artifacts panel to open an inline preview. Reports, documents, and slides render directly in the workspace. Code files display with syntax highlighting.
+  </Tab>
+  <Tab title="Download">
+    Open the artifact and click the **Download** button in the top-right of the preview pane. Artifacts download in their native format (`.pdf`, `.md`, `.py`, `.xlsx`, etc.).
+  </Tab>
+  <Tab title="Share">
+    Click **Share** on any artifact to generate a shareable link. Shared artifacts are read-only by default. You can revoke a share link at any time from the artifact's settings.
+  </Tab>
+</Tabs>
+
+## Artifacts via the API
+
+When you trigger an agent run via the API, any artifacts produced by that run are referenced in the response body under the `artifacts` array. Each entry contains an artifact ID and a download URL.
+
+```bash
+curl https://api.orbitdev.org/v1/agent-runs/{runId} \
+  -H "Authorization: Bearer orb_<your_api_key>"
+```
+
+```json
+{
+  "run_id": "run_7f3k2m",
+  "status": "completed",
+  "output": {
+    "summary": "Competitive analysis of GDPR compliance tooling across the EU market.",
+    "artifacts": [
+      {
+        "artifact_id": "artifact_xyz789",
+        "type": "report",
+        "name": "GDPR Compliance Tool Analysis.pdf",
+        "download_url": "https://api.orbitdev.org/v1/artifacts/artifact_xyz789/download"
+      }
+    ]
+  }
+}
+```
+
+Use the `download_url` from the response to retrieve the artifact file directly in your pipeline.
+
+<Warning>
+  Artifact download URLs returned by the API are time-limited. Fetch the artifact promptly after the run completes, or retrieve a fresh URL by calling `GET /v1/agent-runs/{runId}` again.
+</Warning>
+
+<Tip>
+  For workflows that produce a lot of artifacts — research reports, multi-file codebases, presentation decks — configure the **Builder** agent type as the primary executor. Builder is specifically optimised for structured output generation and handles complex multi-artifact runs more reliably than a general chat prompt.
+</Tip>

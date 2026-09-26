@@ -1,0 +1,178 @@
+---
+title: "POST /v1/chat/completions — Orbit AI Chat API"
+sidebarTitle: "Chat Completions"
+description: "POST /v1/chat/completions sends a message array and returns an AI-generated response. Supports model routing mode selection."
+---
+
+The chat completions endpoint accepts a conversation as an array of messages and returns an AI-generated reply. It is the fastest way to integrate Orbit's language model capabilities into your application — send a single HTTP request and receive a structured response with the model's output and token usage information.
+
+## Endpoint
+
+```
+POST https://api.orbitdev.org/v1/chat/completions
+```
+
+## Request
+
+### Example
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.orbitdev.org/v1/chat/completions \
+  -H 'Authorization: Bearer orb_your_api_key' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "messages": [
+      {"role": "user", "content": "Summarize the key benefits of GDPR compliance for SaaS companies."}
+    ],
+    "mode": "auto"
+  }'
+```
+
+```typescript TypeScript
+const response = await fetch('https://api.orbitdev.org/v1/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${process.env.ORBIT_API_KEY}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    messages: [{ role: 'user', content: 'Hello, Orbit!' }],
+    mode: 'auto',
+  }),
+});
+const data = await response.json();
+console.log(data.choices[0].message.content);
+```
+
+```python Python
+import os
+import requests
+
+response = requests.post(
+    "https://api.orbitdev.org/v1/chat/completions",
+    headers={
+        "Authorization": f"Bearer {os.environ['ORBIT_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "messages": [{"role": "user", "content": "Hello, Orbit!"}],
+        "mode": "auto",
+    },
+)
+data = response.json()
+print(data["choices"][0]["message"]["content"])
+```
+
+</CodeGroup>
+
+### Parameters
+
+<ParamField body="messages" type="array" required>
+  An ordered array of message objects representing the conversation history. Each object must include a `role` and `content` field.
+
+  - `role` (string, required) — the author of the message. Use `"user"` for human turns and `"assistant"` for previous model replies.
+  - `content` (string, required) — the text content of the message.
+
+  To provide conversation context, include prior assistant replies in the array before the latest user message.
+</ParamField>
+
+<ParamField body="mode" type="string" default="auto">
+  Controls which underlying model or routing strategy is used to generate the response. Accepted values:
+
+  | Value | Description |
+  |---|---|
+  | `"auto"` | Orbit automatically selects the most suitable model for the input (default) |
+  | `"normal"` | Standard model, optimised for general-purpose tasks |
+  | `"orbit"` | Orbit's own fine-tuned model |
+  | `"pulsar"` | Faster, lower-latency model for short responses |
+  | `"pro"` | High-capability model for complex or technical tasks |
+</ParamField>
+
+## Response
+
+### Example
+
+```json
+{
+  "id": "cmpl_abc123",
+  "object": "chat.completion",
+  "created": 1704067200,
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "GDPR compliance offers several key benefits..."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 18,
+    "completion_tokens": 120,
+    "total_tokens": 138
+  }
+}
+```
+
+### Response Fields
+
+<ResponseField name="id" type="string">
+  A unique identifier for this completion, prefixed with `cmpl_`. Use this to reference the specific response in logs or for debugging.
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Always `"chat.completion"` for this endpoint.
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Unix timestamp (seconds) of when the completion was generated.
+</ResponseField>
+
+<ResponseField name="choices" type="array">
+  Array of generated completion choices. Currently always contains one item.
+
+  <ResponseField name="choices[].message.role" type="string">
+    Always `"assistant"` for model-generated replies.
+  </ResponseField>
+
+  <ResponseField name="choices[].message.content" type="string">
+    The text of the AI-generated reply. This is the primary field you will read in most integrations.
+  </ResponseField>
+
+  <ResponseField name="choices[].finish_reason" type="string">
+    The reason generation stopped. `"stop"` indicates a natural end of the response; `"length"` indicates the output reached a limit.
+  </ResponseField>
+</ResponseField>
+
+<ResponseField name="usage" type="object">
+  Token consumption for this request.
+
+  <ResponseField name="usage.prompt_tokens" type="integer">
+    Number of tokens in the input messages array.
+  </ResponseField>
+
+  <ResponseField name="usage.completion_tokens" type="integer">
+    Number of tokens in the generated response.
+  </ResponseField>
+
+  <ResponseField name="usage.total_tokens" type="integer">
+    Total tokens consumed by this request (`prompt_tokens` + `completion_tokens`). Monitor this value to track usage against your monthly quota.
+  </ResponseField>
+</ResponseField>
+
+## Error Responses
+
+| Status | Code | Description |
+|---|---|---|
+| `401` | `unauthorized` | Missing or invalid API key. |
+| `402` | `payment_required` | Your account has insufficient quota. Upgrade to Paid tier or purchase a credit pack. |
+| `422` | `unprocessable_entity` | The request body is malformed or missing required fields. Check the `messages` array format. |
+| `429` | `rate_limit_exceeded` | You have exceeded your per-minute or monthly request limit. See [Rate Limits](/api/rate-limits). |
+| `500` | `internal_server_error` | An unexpected error occurred on the server. Retry with exponential backoff. |
+
+<Note>
+  Multi-turn conversations are supported by passing the full message history in the `messages` array. Include previous assistant replies as objects with `"role": "assistant"` to give the model conversation context.
+</Note>
