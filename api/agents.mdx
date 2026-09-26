@@ -1,7 +1,7 @@
 ---
-title: "Agent Run API — Start and Monitor AI Agent Tasks"
+title: "Orbit AI Agents API — Start Runs and Poll for Results"
 sidebarTitle: "Agents API"
-description: "POST /v1/agents/{agentId}/runs starts an agent task. GET /v1/agent-runs/{runId} polls for status and retrieves the result."
+description: "Start an agent run with POST /v1/agents/{agentId}/runs and check its status with GET /v1/agent-runs/{runId}. Includes polling pattern and status values."
 ---
 
 The Agents API exposes two endpoints that let you run Orbit's autonomous AI agents programmatically. Start a run by POSTing a task to your chosen agent, then poll the status endpoint until the run completes and retrieve the result. This asynchronous design lets agents work through long-running tasks — research, report generation, multi-step analysis — without blocking your application.
